@@ -24,7 +24,7 @@ RUMPRUN_TOOLCHAIN_TUPLE=${RUMPRUN_TOOLCHAIN_TUPLE:-x86_64-rumprun-${RUMPKERNEL}}
 echo RUMPRUN_TOOLCHAIN_TUPLE=${RUMPRUN_TOOLCHAIN_TUPLE} >config.mk
 
 # copy pre-build rumprun toolchain
-curl -L https://dl.bintray.com/libos-nuse/x86_64-rumprun-linux/$TRAVIS_OS_NAME/frankenlibc.tar.gz \
+curl -L https://dl.bintray.com/ukontainer/ukontainer/$TRAVIS_OS_NAME/$TRAVIS_GOARCH/frankenlibc.tar.gz \
      -o /tmp/frankenlibc.tar.gz
 sudo mkdir -p /opt/rump && sudo chown $USER /opt/rump
 tar xfz /tmp/frankenlibc.tar.gz -C /

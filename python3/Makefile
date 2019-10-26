@@ -91,7 +91,7 @@ images/python.iso: build/python$(EXESUFFIX)
 images/python.img: build/python$(EXESUFFIX)
 	mkdir -p images
 	mkdir -p mnt
-	dd if=/dev/zero of=images/python.img bs=1M count=96
+	dd if=/dev/zero of=images/python.img bs=1M count=70
 	mkfs.ext4 -F images/python.img
 	sudo mount -o loop images/python.img mnt
 	sudo mkdir -p mnt/python/lib
