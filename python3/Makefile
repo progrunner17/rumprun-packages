@@ -5,7 +5,11 @@ TARBALL=$(notdir $(UPSTREAM))
 ARCH=$(shell $(HOST_CC) -dumpmachine)
 
 ifeq ($(shell uname),Linux)
+ifeq ($(shell arch),aarch64)
+all: libssl $(RUMPRUN_PKGS_DIR)/lib/libsqlite.a images/python.iso
+else
 all: libssl $(RUMPRUN_PKGS_DIR)/lib/libsqlite.a images/python.iso images/python.img
+endif
 else
 all: $(RUMPRUN_PKGS_DIR)/lib/libsqlite.a images/python.iso
 endif

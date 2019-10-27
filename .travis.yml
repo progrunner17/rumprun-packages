@@ -1,23 +1,26 @@
 sudo: required
-dist: trusty
 language: generic
 cache:
   directories:
     - $HOME/.ccache
 script: bash -ex ./.travis-install.sh && bash -ex ./.travis-script.sh
-before_install:
-  - git clone https://github.com/raspberrypi/tools $HOME/rpi-tools
-  - if [ $TRAVIS_OS_NAME = "linux" ] ; then sudo ln -s `which ccache` /usr/lib/ccache/arm-linux-gnueabihf-gcc ; fi
 
 os:
   - osx
   - linux
+
+arch:
+  - amd64
+  - arm64
 
 stages:
   - test
   - deploy
 
 jobs:
+  exclude:
+    - os: osx
+      arch: arm64
   include:
     - stage: deploy
       script:
@@ -28,8 +31,7 @@ jobs:
 
 env:
   global:
-    - PATH="/usr/lib/ccache:/opt/rump/bin:$HOME/rpi-tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin/:$PATH"
-    - TRAVIS_GOARCH=amd64
+    - PATH="/usr/lib/ccache:/opt/rump/bin:$PATH"
   matrix:
           #     - PACKAGE=erlang RUMPKERNEL=netbsd
           #     - PACKAGE=haproxy RUMPKERNEL=netbsd
@@ -112,9 +114,6 @@ env:
 ###    - PACKAGE=zeromq RUMPKERNEL=linux
 ###    - PACKAGE=servus RUMPKERNEL=linux
 ###    - PACKAGE=zerobuf RUMPKERNEL=linux
-  # arm build
-    - PACKAGE=python3 RUMPKERNEL=linux CC=arm-linux-gnueabihf-gcc TRAVIS_GOARCH=arm RUMPRUN_TOOLCHAIN_TUPLE=arm-rumprun-linux
-    - PACKAGE=nginx RUMPKERNEL=linux CC=arm-linux-gnueabihf-gcc TRAVIS_GOARCH=arm RUMPRUN_TOOLCHAIN_TUPLE=arm-rumprun-linux
 
 matrix:
   allow_failures:
@@ -163,12 +162,12 @@ matrix:
       os: osx
     - env: PACKAGE=libffi RUMPKERNEL=linux
       os: osx
-    - env: PACKAGE=python3 RUMPKERNEL=linux CC=arm-linux-gnueabihf-gcc TRAVIS_GOARCH=arm RUMPRUN_TOOLCHAIN_TUPLE=arm-rumprun-linux
-      os: osx
-    - env: PACKAGE=nginx RUMPKERNEL=linux CC=arm-linux-gnueabihf-gcc TRAVIS_GOARCH=arm RUMPRUN_TOOLCHAIN_TUPLE=arm-rumprun-linux
-      os: osx
+    # Unsupported CPU architecture
+    - env: PACKAGE=nodejs RUMPKERNEL=linux
+      arch: arm64
+    - env: PACKAGE=redis RUMPKERNEL=linux
+      arch: arm64
 
- 
       # notifications:
       #   irc:
       #     channels:
